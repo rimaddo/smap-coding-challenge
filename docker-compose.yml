@@ -1,0 +1,42 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=smap
+      - POSTGRES_USER=smap
+      - POSTGRES_PASSWORD=smap
+    volumes:
+      - "smap_pg:/var/lib/postgresql"
+      - "smap_pg_data:/var/lib/postgresql/data"
+    ports:
+      - "5544:5432"
+
+  backend:
+    build: ./backend
+    command: python src/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - "./backend:/code"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  frontend:
+    build: ./frontend
+    command: npm start
+    ports:
+      - "3000:3000"
+      - "35729:35729"
+    volumes:
+      - "./frontend:/usr/src/app"
+      - "/usr/src/app/node_modules"
+    environment:
+      - NODE_ENV=development
+
+volumes:
+  smap_pg:
+  smap_pg_data:
+  smap_user_pg:
+  smap_user_pg_data:
