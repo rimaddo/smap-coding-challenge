@@ -1,6 +1,13 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 from django.contrib import admin
 
-# Register your models here.
+from consumption.models import Area, Consumption, Tariff, User
+
+MODELS = [
+    Area,
+    Consumption,
+    Tariff,
+    User,
+]
+
+for model in MODELS:
+    admin.site.register(model)
